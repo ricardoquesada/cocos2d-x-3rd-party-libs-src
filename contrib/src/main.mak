@@ -89,8 +89,8 @@ endif
 endif
 
 ifdef HAVE_ANDROID
-CC :=  $(HOST)-gcc --sysroot=$(ANDROID_NDK)/platforms/$(ANDROID_API)/arch-$(PLATFORM_SHORT_ARCH)
-CXX := $(HOST)-g++ --sysroot=$(ANDROID_NDK)/platforms/$(ANDROID_API)/arch-$(PLATFORM_SHORT_ARCH)
+CC :=  $(ANDROID_LLVM_PATH) -target $(ANDROID_LLVM_TARGET) --sysroot=$(ANDROID_NDK)/platforms/$(ANDROID_API)/arch-$(PLATFORM_SHORT_ARCH)
+CXX := $(ANDROID_LLVM_PATH)++ -target $(ANDROID_LLVM_TARGET) --sysroot=$(ANDROID_NDK)/platforms/$(ANDROID_API)/arch-$(PLATFORM_SHORT_ARCH)
 endif
 
 ifdef HAVE_TIZEN
