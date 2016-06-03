@@ -88,11 +88,6 @@ STRIP := $(HOST)-strip
 endif
 endif
 
-ifdef HAVE_ANDROID
-CC :=  $(ANDROID_LLVM_PATH) -target $(ANDROID_LLVM_TARGET) --sysroot=$(ANDROID_NDK)/platforms/$(ANDROID_API)/arch-$(PLATFORM_SHORT_ARCH)
-CXX := $(ANDROID_LLVM_PATH)++ -target $(ANDROID_LLVM_TARGET) --sysroot=$(ANDROID_NDK)/platforms/$(ANDROID_API)/arch-$(PLATFORM_SHORT_ARCH)
-endif
-
 ifdef HAVE_TIZEN
 ifeq ($(ARCH),arm)
 CC := ${HOST}-gcc --sysroot=$(TIZEN_SDK)/platforms/tizen-$(TIZEN_SDK_VERSION)/mobile/rootstraps/mobile-$(TIZEN_SDK_VERSION)-device.core
@@ -173,6 +168,17 @@ ifneq ($(shell $(CC) $(CFLAGS) -E -dM -include _mingw.h - < /dev/null | grep -E 
 HAVE_MINGW_W64 := 1
 endif
 endif
+
+ifdef HAVE_ANDROID
+CC :=  $(ANDROID_LLVM_PATH)/clang -target $(ANDROID_LLVM_TARGET) --sysroot=$(ANDROID_NDK)/platforms/$(ANDROID_API)/arch-$(PLATFORM_SHORT_ARCH)
+CXX := $(ANDROID_LLVM_PATH)/clang++ -target $(ANDROID_LLVM_TARGET) --sysroot=$(ANDROID_NDK)/platforms/$(ANDROID_API)/arch-$(PLATFORM_SHORT_ARCH)
+LD := $(ANDROID_LLVM_PATH)/llvm-link
+CCAS := $(ANDROID_LLVM_PATH)/llvm-as
+AR := ar
+RANLIB = ranlib
+STRIP = strip
+endif
+
 
 
 cppcheck = $(shell $(CC) $(CFLAGS) -E -dM - < /dev/null | grep -E $(1))
