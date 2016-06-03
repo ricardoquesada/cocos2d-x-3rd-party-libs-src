@@ -9,7 +9,7 @@ build_arches=""
 build_mode=""
 build_library=""
 build_api=""
-build_gcc_version=""
+build_cc_version=""
 build_platform=""
 build_list_all_libraries=no
 build_show_help_message=no
@@ -106,7 +106,7 @@ do
         fi
         source $platform_config_file
         [[ -z "${build_api}" ]] && build_api=$cfg_default_build_api
-        [[ -z "${build_gcc_version}" ]] && build_gcc_version=$cfg_default_gcc_version
+        [[ -z "${build_cc_version}" ]] && build_cc_version=$cfg_default_cc_version
     fi
 done
 
@@ -167,12 +167,13 @@ if [ $cfg_platform_name = "android" ];then
         exit 1
     fi
 
-    if [[ ! $build_gcc_version =~ ^[0-9]\.[0-9]+$ ]]; then
-        echo "Invalid gcc version number! Gcc version should be numerical numbers."
-        usage
-        exit 1
+    if [[ ! $build_cc_version =~ ^[0-9]\.[0-9]+$ ]]; then
+        if [[ ! $build_cc_version =~ llvm ]]; then
+            echo "Invalid cc version number! cc version should be numerical numbers or llvm"
+            usage
+            exit 1
+        fi
     fi
-
 fi
 
 current_dir=`pwd`
@@ -347,7 +348,7 @@ do
         fi
 
         if [ $cfg_platform_name = "android" ];then
-            export ANDROID_GCC_VERSION=$build_gcc_version
+            export ANDROID_CC_VERSION=$build_cc_version
             export ANDROID_API=android-$build_api
         fi
 
